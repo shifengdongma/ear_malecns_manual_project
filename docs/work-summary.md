@@ -13,7 +13,7 @@
 |仿真|Brian2 单室 LIF；0.1 ms 时间步；全部细胞膜电压每 0.2 ms 记录|
 |交互|刺激/编码/网络参数可调、实际重算、选边慢放、刺激与拓扑比较、离线导出|
 |验证|最近一次 35 项 Python 检查、9 项浏览器检查通过；导入往返与同输入对照检查通过|
-|版本管理|代码仓库使用 Git；远端为 shifengdongma/ear_malecns_manual_project；数据与环境留在 H 盘|
+|版本管理|已完成首次 SSH 上传并验证本地/远端 main 一致；纳入 82 个代码及配套文本文件；数据与环境留在 H 盘|
 
 ## 参考条件结果
 
@@ -48,3 +48,5 @@
 本机入口为 `http://127.0.0.1:8765`，启动脚本 `start_signal_workbench.ps1`，离线入口 `outputs/workbench/index.html`，详细操作见 `user-manual.md`。每次更新同步维护四份核心文档，GitHub 上传按 `.codex/project-rules.md` 逐次征求用户决定。首次上传由本轮请求明确授权。
 
 仓库不包含数据、模型、包和运行报告二进制产物；克隆后需按用户手册恢复数据和重新生成报告。GitHub 最新同步状态通过 `git status -sb` 及 `git ls-remote origin refs/heads/main` 查看，代码提交历史为版本依据。
+
+首次源码上传验收提交：`15fb266ca64925ed593c8cbe04826702aabc061e`（2026-10-03）；仓库地址为 https://github.com/shifengdongma/ear_malecns_manual_project 。后续文档回执和新版本通过 Git 提交历史追踪。
