@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=70"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ear-malecns"
+version = "0.2.0"
+description = "Research scaffold for human-ear FEM derived features driving a MaleCNS-constrained neural model"
+requires-python = ">=3.11"
+dependencies = [
+  "numpy>=2.0", "scipy>=1.13", "pandas>=2.2", "pyarrow>=17",
+  "networkx>=3.3", "matplotlib>=3.9", "h5py>=3.11", "pyyaml>=6",
+  "neuprint-python>=0.6.3", "brian2>=2.7"
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8"]
+
+[project.scripts]
+ear-malecns-stage1 = "ear_malecns.stage1:main"
+ear-malecns-connectome = "ear_malecns.connectome_experiment:main"
+ear-malecns-brain-report = "ear_malecns.brain_report:main"
+ear-malecns-workbench = "ear_malecns.workbench_server:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+ear_malecns = ["brain_report_template.html", "workbench_template.html"]

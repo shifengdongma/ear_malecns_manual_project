@@ -1,0 +1,23 @@
+parameter,value,unit,source_type,source_reference,confidence,scan_range,notes
+tau_m,20,ms,assumed,technical manual section 11,low,10;20;30,Not measured in MaleCNS
+e_l,-60,mV,assumed,technical manual section 11,low,,Engineering resting potential
+v_th,-50,mV,assumed,technical manual section 11,low,,Engineering threshold
+v_reset,-60,mV,assumed,technical manual section 11,low,,Engineering reset
+refractory,2,ms,assumed,technical manual section 11,low,,Computational refractory period
+delay,1.5,ms,assumed,technical manual section 11,low,0.5;1.5;3;5,Not inferred from morphology
+w0,0.5,mV,assumed,technical manual section 11,low,0.125;0.25;0.5;1;2,Log synapse-count gain
+input_weight,6,mV,assumed,stage1 software fixture,low,3;6;12,Changed from scaffold 2 mV for software propagation test; not fitted
+unknown_nt_sign,1,dimensionless,assumed,engineering scenario,low,-1;1,Receptor context unresolved
+nt_classification,dataset annotation,category,predicted,neuPrint consensusNt or predictedNt,low,,ACh positive; GABA negative; all others uncertain
+real_edge_weight,dataset neuron-pair total,count,measured,MaleCNS structural reconstruction,medium,,Only for real snapshots; not physiological conductance
+synthetic_edge_weight,10,count,assumed,software fixture,low,,Not MaleCNS data
+fixed_input_baseline,20,Hz,assumed,technical manual experiment 0,low,,Independent Bernoulli discretization of Poisson drive
+fixed_input_stimulus,100,Hz,assumed,technical manual experiment 0,low,,Not an acoustic carrier frequency
+dt,0.1,ms,assumed,stage1 discretization,medium,,One event maximum per channel per bin
+encoder_envelope_tau,5,ms,assumed,technical manual section 17,low,,Gaussian smoothing; not physiology fitted
+encoder_adaptation_tau,10,ms,assumed,technical manual section 17,low,5;10;20,Adaptation surrogate
+encoder_baseline,5,Hz,assumed,pipeline M1 design,low,,Zero drive returns this baseline
+encoder_max_rate,150,Hz,assumed,pipeline M1 design,low,,Rate ceiling
+encoder_threshold,0.30,dimensionless,assumed,pipeline M1 design,low,,Normalized feature threshold
+encoder_gain,1,dimensionless,assumed,pipeline M1 design,low,0.25;0.5;1;2;4,Exponential saturation gain
+normalization_quantiles,5;95,percentile,assumed,technical manual section 17,low,,Fit pooled training envelopes and freeze for tests

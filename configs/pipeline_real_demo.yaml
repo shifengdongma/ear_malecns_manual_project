@@ -1,0 +1,46 @@
+# Engineering demonstration selected after retaining all 15 gain scenarios.
+# w0=1 mV is assumed, not physiology fitted. Default w0=.5 result is preserved.
+project:
+  seed: 42
+malecns:
+  server: https://neuprint.janelia.org
+  dataset: male-cns:v1.0
+  jon_type_regex: '^JO-.*'
+  auditory_type_regex: '^JO-(A[1-4]|B[1-4])(?:_[abc])?$'
+  hops: 2
+  min_weight: 5
+  max_new_nodes_per_hop: 100
+  max_nodes: 300
+  status_filter: Traced
+  seed_subclass: auditory
+fixed_input:
+  baseline_hz: 20.0
+  stimulus_hz: 100.0
+  onset_s: 0.2
+  offset_s: 0.8
+snn:
+  dt_ms: 0.1
+  simulation_ms: 1000.0
+  tau_m_ms: 20.0
+  e_l_mv: -60.0
+  v_th_mv: -50.0
+  v_reset_mv: -60.0
+  refractory_ms: 2.0
+  delay_ms: 1.5
+  w0_mv: 1.0
+  input_weight_mv: 6.0
+  uncertain_sign: 1.0
+stimulus:
+  fs_hz: 10000
+  duration_s: 1.0
+  frequency_hz: 250.0
+  pressure_pa: 1.0
+  onset_s: 0.2
+  offset_s: 0.8
+encoder:
+  envelope_tau_ms: 5.0
+  adaptation_tau_ms: 10.0
+  r_base_hz: 5.0
+  r_max_hz: 150.0
+  threshold: 0.30
+  gain: 1.0

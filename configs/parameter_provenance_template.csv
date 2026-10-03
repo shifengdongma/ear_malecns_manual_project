@@ -1,0 +1,7 @@
+parameter,value,unit,source_type,source_reference,confidence,scan_range,notes
+malecns_dataset,male-cns:v1.0,,measured,official dataset,high,,freeze dataset version
+min_weight,5,synapses,assumed,engineering filter,low,3|5|10,not a physiological threshold
+tau_m,20,ms,assumed,engineering prior,low,10|20|30,replace with cell-type physiology when available
+w0,0.5,mV,assumed,calibration parameter,low,0.125|0.25|0.5|1|2,structural synapse count is not conductance
+adaptation_tau,10,ms,literature-constrained,fly auditory physiology,medium,5|10|20,fit to actual dataset for M1
+human_to_fly_mapping,robust-normalized,,assumed,model design,low,multiple encoders,central cross-species uncertainty
