@@ -1,5 +1,8 @@
 # 声源到 MaleCNS 神经活动 · 完整链路工作台
 
+2026-10-07 科研升级：[启动与使用手册](docs/STARTUP_AND_USAGE.md) · [研究协议与论文设计](docs/RESEARCH_PROTOCOL.md) · [完整研究链路图](docs/research-pipeline.svg)。新增等 RMS、多种子配对、时序空模型、消融、增益敏感性和中文术语，65 次实际先导运行的交互报告在本机 **http://127.0.0.1:8765/research**。
+
+
 打开 **http://127.0.0.1:8765**，或运行 `./start_signal_workbench.ps1`。支持修改刺激后真正重新仿真、逐连接检查延迟与膜电压、真实 OpenEar 几何、265 个真实 SWC、刺激/拓扑条件比较和已有 FEM HDF5 导入。
 
 [操作与本轮实测结果](docs/SIGNAL_WORKBENCH_GUIDE.md) · [离线完整链路报告](outputs/workbench/index.html) · [界面预览](outputs/workbench/workbench_overview.png) · [神经元事件预览](outputs/workbench/workbench_neural_events.png)。默认人耳响应为明确标注的参考传递函数演示；OpenEar 几何已复用，真实求解响应从已有模型导入。全部输出存储在 H 盘。

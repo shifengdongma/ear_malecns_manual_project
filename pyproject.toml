@@ -21,6 +21,7 @@ ear-malecns-stage1 = "ear_malecns.stage1:main"
 ear-malecns-connectome = "ear_malecns.connectome_experiment:main"
 ear-malecns-brain-report = "ear_malecns.brain_report:main"
 ear-malecns-workbench = "ear_malecns.workbench_server:main"
+ear-malecns-research = "ear_malecns.research:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
@@ -29,4 +30,4 @@ package-dir = {"" = "src"}
 where = ["src"]
 
 [tool.setuptools.package-data]
-ear_malecns = ["brain_report_template.html", "workbench_template.html"]
+ear_malecns = ["brain_report_template.html", "workbench_template.html", "research_report_template.html"]

@@ -1,0 +1,161 @@
+{
+  "name": "2026-10-07 exploratory paired pilot",
+  "trial_seeds": [
+    11,
+    23,
+    37,
+    53,
+    71
+  ],
+  "conditions": [
+    {
+      "name": "tone_original",
+      "label": "真实原图：250 Hz tone"
+    },
+    {
+      "name": "tone_weight_shuffled",
+      "label": "权重打乱",
+      "topology_control": "weight_shuffled"
+    },
+    {
+      "name": "tone_rewired",
+      "label": "保度重连",
+      "topology_control": "rewired"
+    },
+    {
+      "name": "tone_time_shuffled",
+      "label": "每通道计数保留：时间打乱",
+      "input_control": "shuffle_time"
+    },
+    {
+      "name": "tone_jo_only",
+      "label": "消融：只保留 JO → 非 JO",
+      "topology_control": "jo_only"
+    },
+    {
+      "name": "pulse15_rms",
+      "label": "等 RMS pulse：IPI 15 ms",
+      "parameters": {
+        "kind": "pulse",
+        "ipi_ms": 15,
+        "rms_match_pa": 0.5
+      }
+    },
+    {
+      "name": "pulse36_rms",
+      "label": "等 RMS pulse：IPI 36 ms",
+      "parameters": {
+        "kind": "pulse",
+        "ipi_ms": 36,
+        "rms_match_pa": 0.5
+      }
+    },
+    {
+      "name": "pulse72_rms",
+      "label": "等 RMS pulse：IPI 72 ms",
+      "parameters": {
+        "kind": "pulse",
+        "ipi_ms": 72,
+        "rms_match_pa": 0.5
+      }
+    },
+    {
+      "name": "gain05",
+      "label": "假设 w0=0.5 mV",
+      "parameters": {
+        "w0_mv": 0.5
+      }
+    },
+    {
+      "name": "gain15",
+      "label": "假设 w0=1.5 mV",
+      "parameters": {
+        "w0_mv": 1.5
+      }
+    },
+    {
+      "name": "gain20",
+      "label": "假设 w0=2 mV",
+      "parameters": {
+        "w0_mv": 2
+      }
+    },
+    {
+      "name": "silence",
+      "label": "声源静默；保留 5 Hz 自发输入",
+      "parameters": {
+        "amplitude_pa": 0
+      }
+    },
+    {
+      "name": "zero_input",
+      "label": "真正零事件稳定性",
+      "input_control": "zero_input"
+    }
+  ],
+  "same_input_pairs": [
+    [
+      "tone_weight_shuffled",
+      "tone_original"
+    ],
+    [
+      "tone_rewired",
+      "tone_original"
+    ],
+    [
+      "tone_jo_only",
+      "tone_original"
+    ],
+    [
+      "gain05",
+      "tone_original"
+    ],
+    [
+      "gain15",
+      "tone_original"
+    ],
+    [
+      "gain20",
+      "tone_original"
+    ]
+  ],
+  "comparisons": [
+    [
+      "tone_weight_shuffled",
+      "tone_original"
+    ],
+    [
+      "tone_rewired",
+      "tone_original"
+    ],
+    [
+      "tone_time_shuffled",
+      "tone_original"
+    ],
+    [
+      "tone_jo_only",
+      "tone_original"
+    ],
+    [
+      "gain05",
+      "tone_original"
+    ],
+    [
+      "gain15",
+      "tone_original"
+    ],
+    [
+      "gain20",
+      "tone_original"
+    ],
+    [
+      "pulse15_rms",
+      "pulse36_rms"
+    ],
+    [
+      "pulse72_rms",
+      "pulse36_rms"
+    ]
+  ],
+  "interpretation": "Fixed reconstructed graph; paired computational repeats, exploratory bootstrap intervals, no physiological validation or confirmatory p-values."
+}

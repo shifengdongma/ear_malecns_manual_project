@@ -1,5 +1,7 @@
 # 用户手册
 
+2026-10-07 更新：[程序启动与使用手册](STARTUP_AND_USAGE.md) · [科研协议与论文设计](RESEARCH_PROTOCOL.md) · [更新链路图](research-pipeline.svg)。新增等 RMS 控件、65 次配对先导实验与中文术语解释，启动脚本支持 `-Research`、`-Restart`、`-PythonExecutable`。
+
 ## 本机使用
 
 项目目录为 `H:/基于人耳有限元机械响应与果蝇听觉连接组的跨物种机械感觉编码联合仿真框架/ear_malecns_manual_project`。现有环境为 `C:/Users/liyang/.virtualenvs/ear-malecns/Scripts/python.exe`，当前已安装运行依赖；无需为启动再次安装环境。
@@ -43,7 +45,7 @@ $pythonExecutable = 'C:/Users/liyang/.virtualenvs/ear-malecns/Scripts/python.exe
 |`metadata` 属性 `sample_rate_hz`|正采样率|
 |`metadata` 属性 `fem_version`|来源和版本|
 
-四个数组必须等长、有限、一维；响应限制 20 MB、0.4–2 秒。标定含 `q_low`、`q_high`、`envelope_tau_ms: 5`，来自同物理量与单位的共享训练/参考集。合成演示的 `calibration_demo.json` 不可直接当真实 FEM 标定。
+四个数组必须等长、有限、一维；响应限制 20 MB、大于 0.4 且不超过 2 秒。标定含 `q_low`、`q_high`、`envelope_tau_ms: 5`，来自同物理量与单位的共享训练/参考集。合成演示的 `calibration_demo.json` 不可直接当真实 FEM 标定。
 
 OpenEar 提供真实解剖几何；默认机械曲线是已打标的参考传递函数演示，并非求解后的 OpenEar FEM。格式导入成功也不代表物理验证。无需重建人耳研究，可直接接已有模型输出。
 

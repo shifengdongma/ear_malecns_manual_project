@@ -12,7 +12,7 @@ import threading
 import uuid
 
 from .paths import configure_storage
-from .signal_workbench import Engine
+from .signal_workbench import Engine, analysis_window
 from .provenance import write_json, verify_manifest
 from .fem_io import read_fem_h5
 
@@ -80,6 +80,14 @@ def main(argv=None):
             try:
                 path=self.path.split('?',1)[0]
                 if path=='/':return self.send(template,'text/html; charset=utf-8')
+                if path=='/research':
+                    latest=engine.root/'outputs/research/latest.json'
+                    if not latest.exists():return self.send('Run scripts/23_run_research.py first','text/plain; charset=utf-8',status=404)
+                    info=json.loads(latest.read_text(encoding='utf-8'))
+                    report=Path(info['report']).resolve()
+                    if not report.is_relative_to((engine.root/'outputs/research').resolve()):raise ValueError('Invalid research report path')
+                    verify_manifest(report.parent)
+                    return self.send(report.read_text(encoding='utf-8'),'text/html; charset=utf-8')
                 if path=='/api/bootstrap':
                     cases=json.loads(cache_file.read_text())['cases'] if cache_file.exists() else []
                     return self.send({**engine.assets,'token':token,'cases':cases})
@@ -128,7 +136,7 @@ def main(argv=None):
                             if f[name].ndim!=1 or f[name].size>100000:raise ValueError('FEM arrays must be 1D, at most 100000 samples')
                     data=read_fem_h5(folder/'response.h5')
                     duration=len(data['time_s'])/data['sample_rate_hz']
-                    if not .4<=duration<=2:raise ValueError('FEM duration must be 0.4–2 s')
+                    analysis_window(duration)
                     write_json(folder/'calibration.json',calibration)
                     return self.send({'fem_id':identifier,'version':data['fem_version'],'duration_s':duration})
                 return self.send({'error':'Not found'},status=404)

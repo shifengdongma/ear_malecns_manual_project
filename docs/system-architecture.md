@@ -37,7 +37,7 @@ flowchart LR
 
 ## 数据与时间契约
 
-FEM HDF5 中四个等长、有限一维数组为 `stimulus/time_s`、`stimulus/pressure_Pa`、`fem/tm_displacement_m`、`fem/stapes_velocity_m_s`。时间从 0 开始、均匀采样；`metadata` 组属性包含 `sample_rate_hz`、非空 `fem_version`。单位分别为 s、Pa、m、m/s。工作台导入限制 20 MB、0.4–2 秒、各数组不超过 100,000 点。
+FEM HDF5 中四个等长、有限一维数组为 `stimulus/time_s`、`stimulus/pressure_Pa`、`fem/tm_displacement_m`、`fem/stapes_velocity_m_s`。时间从 0 开始、均匀采样；`metadata` 组属性包含 `sample_rate_hz`、非空 `fem_version`。单位分别为 s、Pa、m、m/s。工作台导入限制 20 MB、大于 0.4 且不超过 2 秒、各数组不超过 100,000 点。
 
 标定 JSON 至少包含有限有序 `q_low`、`q_high` 及 `envelope_tau_ms: 5`。分位数来自共享参考/训练集的 log-envelope，测试刺激不单独拟合。真实 FEM 必须使用同物理量与单位的标定。默认演示标定不是生理标定。
 
@@ -74,3 +74,15 @@ ear_malecns_manual_project/
 最近验收：35 项 Python 检查、9 项浏览器检查；HDF5 导入往返、同输入对照通过。测试覆盖幅度比例/静默、固定标定、非法参数、兴奋/抑制的延迟电压更新等。检查记录和截图留在 H 盘 `outputs/workbench`。
 
 真实 FEM 使用现有适配契约替换演示层；生理标定和 AdEx 可扩展编码与神经元动力学层。三跳/更大图需重新冻结并评估资源；空间电缆方程需要单独模型，不能仅靠 SWC 着色声称实现。
+
+## 2026-10-07 科研实验与可视化升级
+
+新增 `research.py` 和 `scripts/23_run_research.py`，从 `configs/research_pilot.json` 执行固定图、多种子配对试验。声源层可按刺激窗口 RMS 缩放，特征层的固定共享标定不改变。时序空模型保留通道计数；结构对照复用冻结输入；JO-only 仅保留 JO→非 JO；统计先配对再 bootstrap。
+
+`Engine(load_assets=False)` 省略批量实验不需要的几何读取；`simulate(record_voltage=False)` 保持相同放电和到达事件但省略电压监测。原工作台默认行为仍记录全电压。验证了两种记录模式 spike 表相同。
+
+`research_report_template.html` 为自包含统计/术语报告；服务 `/research` 校验最新报告目录与 manifest 后返回页面。`outputs/research` 保存新批次，失败批次保留部分表，latest 只指向完成批次。
+
+主工作台缓存强边排序和 Path2D 的 SWC 投影；只有视角、范围、选中细胞或尺寸改变才重建，时间播放只更新状态颜色。新增等 RMS 输入控件和中文术语区。
+
+研究架构强调证据分层；更新图见 `research-pipeline.svg`，可编辑源为 `.mmd`。47 项 Python 检查、14 项浏览器检查通过。统计单位是运行种子，不是细胞或个体；图截断、预测递质、动力学和机械演示误差仍需独立验证。

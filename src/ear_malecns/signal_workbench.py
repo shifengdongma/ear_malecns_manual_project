@@ -26,7 +26,7 @@ DEFAULTS = dict(kind='tone', frequency_hz=250., amplitude_pa=1., ipi_ms=36., mod
 
 
 def parameters(values):
-    unknown = set(values) - set(DEFAULTS) - {'waveform', 'fem_id'}
+    unknown = set(values) - set(DEFAULTS) - {'waveform', 'fem_id', 'rms_match_pa', 'topology_seed'}
     if unknown:
         raise ValueError(f'Unknown parameters: {sorted(unknown)}')
     p = {**DEFAULTS, **values}
@@ -46,10 +46,21 @@ def parameters(values):
         wave = np.asarray(p.get('waveform'), dtype=float)
         if wave.ndim != 1 or len(wave) != 10000 or not np.isfinite(wave).all() or (np.abs(wave) > 1).any():
             raise ValueError('WAV input must be 10000 finite mono PCM samples in [-1,1]')
+    if p.get('rms_match_pa') is not None:
+        rms=float(p['rms_match_pa'])
+        if not np.isfinite(rms) or not 0 < rms <= 2:
+            raise ValueError('rms_match_pa must be finite in (0,2]')
+        if p['mechanical']=='imported':
+            raise ValueError('Imported mechanical responses cannot be RMS-rescaled independently')
+        p['rms_match_pa']=rms
+    ts=p.get('topology_seed',p['seed'])
+    if float(ts)!=int(ts) or not 0<=int(ts)<=2**32-1:
+        raise ValueError('Invalid topology seed')
+    p['topology_seed']=int(ts)
     return p
 
 
-def source_wave(p):
+def _source_wave(p):
     fs = 10000.
     t = np.arange(10000) / fs
     gate = (t >= .2) & (t < .8)
@@ -68,6 +79,17 @@ def source_wave(p):
         # PCM-to-Pa scale is explicit; do not normalize each uploaded clip.
         return t, np.asarray(p['waveform']) * amplitude
     return t, pressure * gate
+
+
+def source_wave(p):
+    t,pressure=_source_wave(p)
+    if p.get('rms_match_pa') is not None:
+        active=(t>=.2)&(t<.8)
+        rms=float(np.sqrt(np.mean(pressure[active]**2)))
+        if rms<=0:
+            raise ValueError('Cannot RMS-match a silent stimulus')
+        pressure=pressure*(p['rms_match_pa']/rms)
+    return t,pressure
 
 
 def mechanical_data(p):
@@ -128,8 +150,15 @@ def ply_surface(path):
                 edges=[list(e) for e in sorted(edges)[::3]], sha256=sha256(path))
 
 
+def analysis_window(duration):
+    """A positive stimulus window is required for rates and latency statistics."""
+    if not np.isfinite(duration) or not .4 < duration <= 2:
+        raise ValueError('Workbench requires duration >0.4 and <=2 s for a nonempty analysis window')
+    return .2,duration-.2
+
+
 class Engine:
-    def __init__(self, root):
+    def __init__(self, root, *, load_assets=True):
         self.root=root
         self.snapshot=root/'data/processed/malecns_snapshots/real_public_fixed_20261003'
         self.graph_meta=verify_manifest(self.snapshot)
@@ -146,7 +175,7 @@ class Engine:
         self.calibrations={m:fit_reference_calibration(m) for m in ['demo','direct']}
         for m,c in self.calibrations.items():
             write_json(self.directory/f'calibration_{m}.json',c)
-        self.assets=self.bootstrap()
+        self.assets=self.bootstrap() if load_assets else None
 
     def bootstrap(self):
         cells=[]
@@ -201,10 +230,10 @@ class Engine:
             d=mechanical_data(p)
             calibration=self.calibrations[p['mechanical']]
         duration=len(d['time_s'])/d['sample_rate_hz']
-        if not .4<=duration<=2:
-            raise ValueError('Workbench supports 0.4–2 seconds per experiment')
+        onset,offset=analysis_window(duration)
         cfg['snn']['simulation_ms']=duration*1000
-        cfg['fixed_input']['offset_s']=duration-.2
+        cfg['fixed_input']['onset_s']=onset
+        cfg['fixed_input']['offset_s']=offset
         write_fem_h5(out/'mechanical.h5',d['time_s'],d['pressure_pa'],d['tm_displacement_m'],d['stapes_velocity_m_s'],d['sample_rate_hz'],d['fem_version'])
         write_json(out/'calibration.json',calibration)
         channels,times,z,rate=encode_events(d,cfg,calibration,len(self.seed_ids))
@@ -213,7 +242,7 @@ class Engine:
         selected=self.snapshot
         if p['topology']!='original':
             selected=out/'control_snapshot'
-            control_snapshot(self.snapshot,selected,p['topology'],p['seed'])
+            control_snapshot(self.snapshot,selected,p['topology'],p['topology_seed'])
         edges=pd.read_parquet(selected/'edges.parquet')
         spikes,vt,voltage,connections,arrivals=self.simulate(edges,channels,times,cfg)
         from .stage1 import summarize
@@ -240,6 +269,7 @@ class Engine:
         keep=freq<=1000
         features=dict(dominant_hz=float(freq[np.argmax(power)]) if power.max()>0 else 0.,
             peak_pressure_pa=float(np.max(np.abs(d['pressure_pa']))),
+            stimulus_rms_pa=float(np.sqrt(np.mean(d['pressure_pa'][(d['time_s']>=.2)&(d['time_s']<.8)]**2))),
             onset_ms=200 if p['kind']!='wav' and p['mechanical']!='imported' else None,
             ipi_ms=p['ipi_ms'] if p['kind']=='pulse' and p['mechanical']!='imported' else None,
             encoder='Envelope/adaptation M1; no fitted carrier-selective JO tuning')
@@ -266,7 +296,7 @@ class Engine:
             arrivals='Derived exactly from monitored presynaptic spikes and Brian synaptic delays; not proof of postsynaptic causation'))
         return data
 
-    def simulate(self,edges,channels,times,cfg):
+    def simulate(self,edges,channels,times,cfg, *, record_voltage=True):
         from brian2 import Network,StateMonitor,start_scope,defaultclock,prefs,seed,ms,mV
         from .snn import build_lif_network,attach_event_input
         from .analysis import spike_table
@@ -275,9 +305,11 @@ class Engine:
         nt=self.nodes.set_index('bodyId').consensusNt.dropna().to_dict()
         group,syn,monitor,old_voltage,to_idx,to_body=build_lif_network(self.nodes,edges,nt_map=nt,**params)
         old_voltage.active=False
-        voltage=StateMonitor(group,'v',record=True,dt=.2*ms,when='end')
+        voltage=StateMonitor(group,'v',record=True,dt=.2*ms,when='end') if record_voltage else None
         source,drive=attach_event_input(group,to_idx,self.seed_ids,channels,times,cfg['snn']['input_weight_mv'])
-        net=Network(group,syn,monitor,old_voltage,voltage,source,drive)
+        objects=[group,syn,monitor,old_voltage,source,drive]
+        if voltage is not None:objects.append(voltage)
+        net=Network(*objects)
         net.run(cfg['snn']['simulation_ms']*ms)
         spikes=spike_table(monitor,to_body)
         connections=[[int(a),int(b),round(float(w),8),round(float(delay),6)] for a,b,w,delay in
@@ -288,4 +320,6 @@ class Engine:
         for ei,(a,b,w,delay) in enumerate(connections):
             arrivals.extend([round(float(t+delay),3),ei] for t in trains[a] if t+delay<cfg['snn']['simulation_ms'])
         arrivals.sort(key=lambda a:(a[0],a[1]))
-        return spikes,np.asarray(voltage.t/ms),np.asarray(voltage.v/mV),connections,arrivals
+        vt=np.asarray(voltage.t/ms) if voltage is not None else np.empty(0)
+        vv=np.asarray(voltage.v/mV) if voltage is not None else np.empty((len(self.ids),0))
+        return spikes,vt,vv,connections,arrivals

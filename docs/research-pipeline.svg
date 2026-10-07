@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="920" viewBox="0 0 1500 920">
+<rect width="1500" height="920" fill="#0b1523"/>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="none" stroke="#72c5e4" stroke-width="2"/></marker></defs>
+<g font-family="Microsoft YaHei,Segoe UI,sans-serif">
+<text x="35" y="55" fill="#e4edf9" font-size="29">声源—机械特征—真实连接图—模型信号传递—科研验证</text>
+<text x="35" y="91" fill="#a5b7cb" font-size="16">2026-10-07 进度：可复现先导实验；蓝=已实现，橙=演示/导入接口，紫=后续独立验证</text>
+<rect x="35" y="135" width="335" height="170" rx="13" fill="#142337" stroke="#29789c" stroke-width="2"/>
+<text x="52" y="170" fill="#e4edf9" font-size="20">A 外部刺激</text>
+<text x="52" y="210" fill="#b4c6d9" font-size="14">tone / pulse / AM / WAV</text>
+<text x="52" y="250" fill="#b4c6d9" font-size="14">声压 p(t)，单点输入；等 RMS 控制</text>
+<rect x="400" y="135" width="335" height="170" rx="13" fill="#142337" stroke="#ba873a" stroke-width="2"/>
+<text x="417" y="170" fill="#e4edf9" font-size="20">B 既有人耳模型</text>
+<text x="417" y="210" fill="#b4c6d9" font-size="14">OpenEar 解剖几何 + FEM HDF5 导入</text>
+<text x="417" y="250" fill="#b4c6d9" font-size="14">演示传递函数可运行；真实 FEM 待接入</text>
+<rect x="765" y="135" width="335" height="170" rx="13" fill="#142337" stroke="#ba873a" stroke-width="2"/>
+<text x="782" y="170" fill="#e4edf9" font-size="20">C 机械响应</text>
+<text x="782" y="210" fill="#b4c6d9" font-size="14">TM 位移 m / stapes 速度 m/s</text>
+<text x="782" y="250" fill="#b4c6d9" font-size="14">来源与单位标记，格式可读不等于验证</text>
+<rect x="1130" y="135" width="335" height="170" rx="13" fill="#142337" stroke="#29789c" stroke-width="2"/>
+<text x="1147" y="170" fill="#e4edf9" font-size="20">D 特征</text>
+<text x="1147" y="210" fill="#b4c6d9" font-size="14">频谱 / envelope / onset / IPI</text>
+<text x="1147" y="250" fill="#b4c6d9" font-size="14">物理能量控制与特征标定分开</text>
+<rect x="1130" y="355" width="335" height="170" rx="13" fill="#142337" stroke="#29789c" stroke-width="2"/>
+<text x="1147" y="390" fill="#e4edf9" font-size="20">E 显式编码</text>
+<text x="1147" y="430" fill="#b4c6d9" font-size="14">固定 Q5/Q95 + 适应 + rate</text>
+<text x="1147" y="470" fill="#b4c6d9" font-size="14">共享标定；M1 无生理频率调谐</text>
+<rect x="765" y="355" width="335" height="170" rx="13" fill="#142337" stroke="#29789c" stroke-width="2"/>
+<text x="782" y="390" fill="#e4edf9" font-size="20">F 等效 JON 输入</text>
+<text x="782" y="430" fill="#b4c6d9" font-size="14">65 独立通道，冻结 spikes</text>
+<text x="782" y="470" fill="#b4c6d9" font-size="14">种子与 SHA-256；结构对照共享输入</text>
+<rect x="400" y="355" width="335" height="170" rx="13" fill="#142337" stroke="#29789c" stroke-width="2"/>
+<text x="417" y="390" fill="#e4edf9" font-size="20">G 真实 MaleCNS v1.0</text>
+<text x="417" y="430" fill="#b4c6d9" font-size="14">JO-A/B auditory：265 细胞 / 6,535 边</text>
+<text x="417" y="470" fill="#b4c6d9" font-size="14">1–2 hop（连接边层数）；真实 SWC</text>
+<rect x="35" y="355" width="335" height="170" rx="13" fill="#142337" stroke="#29789c" stroke-width="2"/>
+<text x="52" y="390" fill="#e4edf9" font-size="20">H 单室 LIF 模型</text>
+<text x="52" y="430" fill="#b4c6d9" font-size="14">0.1 ms 仿真；符号 ΔV 与延迟</text>
+<text x="52" y="470" fill="#b4c6d9" font-size="14">结构重建 + 预测递质 + 假设动力学</text>
+<rect x="35" y="575" width="335" height="170" rx="13" fill="#142337" stroke="#29789c" stroke-width="2"/>
+<text x="52" y="610" fill="#e4edf9" font-size="20">I 传递与响应</text>
+<text x="52" y="650" fill="#b4c6d9" font-size="14">全膜电压 / 延迟事件 / raster / latency</text>
+<text x="52" y="690" fill="#b4c6d9" font-size="14">0.2 ms 记录；未响应细胞保留</text>
+<rect x="400" y="575" width="335" height="170" rx="13" fill="#142337" stroke="#29789c" stroke-width="2"/>
+<text x="417" y="610" fill="#e4edf9" font-size="20">J 科研控制</text>
+<text x="417" y="650" fill="#b4c6d9" font-size="14">5 种子 × 13 条件 = 65 次</text>
+<text x="417" y="690" fill="#b4c6d9" font-size="14">等 RMS / 时序打乱 / 消融 / 参数敏感性</text>
+<rect x="765" y="575" width="335" height="170" rx="13" fill="#142337" stroke="#29789c" stroke-width="2"/>
+<text x="782" y="610" fill="#e4edf9" font-size="20">K 统计与可视化</text>
+<text x="782" y="650" fill="#b4c6d9" font-size="14">配对差值 / 95% 区间 / CSV / SVG</text>
+<text x="782" y="690" fill="#b4c6d9" font-size="14">交互式置信区间；SWC 投影缓存</text>
+<rect x="1130" y="575" width="335" height="170" rx="13" fill="#142337" stroke="#765eae" stroke-width="2"/>
+<text x="1147" y="610" fill="#e4edf9" font-size="20">L 独立验证与论文</text>
+<text x="1147" y="650" fill="#b4c6d9" font-size="14">真实 FEM + JON/AMMC 生理约束</text>
+<text x="1147" y="690" fill="#b4c6d9" font-size="14">拟合/验证/测试分离；当前仍待完成</text>
+<line x1="370" y1="220" x2="400" y2="220" stroke="#72c5e4" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="735" y1="220" x2="765" y2="220" stroke="#72c5e4" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="1100" y1="220" x2="1130" y2="220" stroke="#72c5e4" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="1297" y1="305" x2="1297" y2="355" stroke="#72c5e4" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="1130" y1="440" x2="1100" y2="440" stroke="#72c5e4" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="765" y1="440" x2="735" y2="440" stroke="#72c5e4" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="400" y1="440" x2="370" y2="440" stroke="#72c5e4" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="202" y1="525" x2="202" y2="575" stroke="#72c5e4" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="370" y1="660" x2="400" y2="660" stroke="#72c5e4" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="735" y1="660" x2="765" y2="660" stroke="#72c5e4" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="1100" y1="660" x2="1130" y2="660" stroke="#72c5e4" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="35" y="841" fill="#e0bb6d" font-size="16">证据边界：结构是真实重建，动力学是工程假设；随机种子重复不等于生物重复。</text>
+<text x="35" y="879" fill="#a5b7cb" font-size="16">研究问题：在明确编码及动力学下，结构、刺激时序和增益如何影响下游响应？</text>
+</g></svg>

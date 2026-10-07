@@ -1,0 +1,11 @@
+flowchart LR
+A["A 声源 p(t)：等 RMS 控制"] --> B["B OpenEar 几何 / 已有 FEM 导入"]
+B --> C["C TM 位移 / stapes 速度：来源与单位"]
+C --> D["D 包络 / 频谱 / IPI"] --> E["E 共享标定 + 适应：假设编码"]
+E --> F["F 冻结 65 通道 JON spikes"] --> G["G MaleCNS v1.0：265 细胞 / 6535 边"]
+G --> H["H 单室 LIF：延迟 + 带符号电压增量"] --> I["I 全电压 / raster / rate / latency"]
+I --> J["J SWC 状态与交互展示"]
+F --> K["K 配对对照：结构 / 时序 / 消融 / 增益"]
+G --> K
+K --> L["L 5 种子 × 13 条件：效应与探索性区间"]
+L --> M["M 独立 FEM / 生理数据验证：待完成"]
