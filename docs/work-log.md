@@ -74,4 +74,4 @@
 - 验证：49 项 Python 检查、14 项联动浏览器检查通过；真实 265 细胞/6,535 边/265 SWC。pulse IPI 36 ms + RMS 0.5 Pa 真实重算产生 3,091 感觉事件、1,165 spikes，窗口计数与记录一致；JSON 转义、双向定位、缓存复用和离线回放通过。
 - 产物：outputs/workbench/sync_browser_qa.json、sync_overview_preview.png、sync_offline.html；当前版报告副本 outputs/research/interactive-current.html。更新四份核心文档、启动手册、工作台指南和 README。
 - 科学边界：仍为连接组约束单室 LIF，没有空间电缆传播、生理拟合或真实 FEM 求解；目标随后发放不代表单边因果，形态中心闪光不是胞体/突触定位。
-- GitHub：用户已明确要求“上传到github”，授权本次链路交互与协同响应更新上传；已核对 49 项 Python、14 项浏览器验收记录和源码哈希，提交及推送结果见后续回执。
+- GitHub：用户明确要求“上传到github”，已授权并成功上传本次链路交互与协同响应更新至 origin/main；功能提交 `dee525b8f5bf15bd1a7524441ad3109418435c6c`。提交 16 个源码、配置、测试和文档文件，验收记录为 49 项 Python、14 项浏览器检查，源码哈希与验收时一致。全部受跟踪文件通过模型/产物/包文件排除与凭据检查；原始数据和运行产物留在 H 盘。随后上传本回执，最终版本以 Git 历史为准。
