@@ -6,7 +6,6 @@ import copy
 import hashlib
 import json
 import re
-import base64
 import numpy as np
 import pandas as pd
 from .signal_workbench import Engine, parameters, mechanical_data
@@ -171,10 +170,9 @@ def render_report(root,out,data):
     fig.suptitle(f'Connectome-constrained LIF pilot | {len(data["protocol"]["trial_seeds"])} stochastic trials per condition, one reconstructed graph',fontsize=11)
     handles,labels=axes[0].get_legend_handles_labels();fig.legend(handles,labels,loc='lower center',ncol=2,frameon=False)
     fig.tight_layout(rect=[0,.06,1,.94]);fig.savefig(out/'research_summary.png',dpi=180);fig.savefig(out/'research_summary.svg');plt.close(fig)
-    template=(Path(__file__).parent/'research_report_template.html').read_text(encoding='utf-8')
-    content=template.replace('/*RESULTS*/',json.dumps(data,ensure_ascii=False,allow_nan=False).replace('<','\\u003c'))
-    content=content.replace('FIGURE_DATA',base64.b64encode((out/'research_summary.png').read_bytes()).decode())
-    (out/'index.html').write_text(content,encoding='utf-8')
+    from .view_templates import research_html
+    (out/'index.html').write_text(research_html(data,(out/'research_summary.png').read_bytes()),encoding='utf-8')
+
 
 def main(argv=None):
     root=configure_storage();parser=argparse.ArgumentParser(description=__doc__)

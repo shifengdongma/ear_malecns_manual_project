@@ -90,3 +90,7 @@ Start-Process 'outputs/visualizations/malecns_brain_explorer/index.html'
 父运行保存 `encoder.npz`、`calibration.json`、`comparison.csv`、配置和 manifest；original、rewired、weight_shuffled 各有独立运行目录，保存图快照、固定输入、spikes、latency、raster、graph 和指标。固定输入 SHA-256 必须一致。源码哈希、种子和依赖版本记录在 manifest 中。
 
 离线软件夹具验证目录仍为 `outputs/runs/initial_pipeline_verified`；本轮真实结构实验为 `outputs/runs/malecns_brain_focus_20261003`，可视化在 `outputs/visualizations/malecns_brain_explorer`。synthetic transfer 与负数 ID 图只验证软件；encoder 尚未生理拟合。`real_malecns_acceptance` 保持 false，等待注释功能复核和动力学标定。
+
+## 链路定位与协同响应
+
+执行 `./start_signal_workbench.ps1 -Restart -Research`，在科研报告点击 A–K 进入对应操作。统一总览同步展示声源、编码输入、逐跳活动、突触延迟与真实 SWC；修改参数会明确标为待运行。使用“从刺激起点联动播放”与“导览活跃突触事件”完成连续演示；新单次实验与冻结批量统计分别标识。详见 [启动与使用手册](docs/STARTUP_AND_USAGE.md)。

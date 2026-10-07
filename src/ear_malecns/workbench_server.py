@@ -15,6 +15,7 @@ from .paths import configure_storage
 from .signal_workbench import Engine, analysis_window
 from .provenance import write_json, verify_manifest
 from .fem_io import read_fem_h5
+from .view_templates import workbench_html, research_html
 
 
 def main(argv=None):
@@ -24,7 +25,7 @@ def main(argv=None):
     parser.add_argument('--prepare',action='store_true',help='Run reference cases without starting the HTTP service')
     args=parser.parse_args(argv)
     engine=Engine(root)
-    template=(Path(__file__).parent/'workbench_template.html').read_text(encoding='utf-8')
+    template=workbench_html()
     cache_file=engine.directory/'case_library.json'
     if args.prepare:
         cases=[]
@@ -87,7 +88,8 @@ def main(argv=None):
                     report=Path(info['report']).resolve()
                     if not report.is_relative_to((engine.root/'outputs/research').resolve()):raise ValueError('Invalid research report path')
                     verify_manifest(report.parent)
-                    return self.send(report.read_text(encoding='utf-8'),'text/html; charset=utf-8')
+                    data=json.loads((report.parent/'results.json').read_text(encoding='utf-8'))
+                    return self.send(research_html(data,(report.parent/'research_summary.png').read_bytes()),'text/html; charset=utf-8')
                 if path=='/api/bootstrap':
                     cases=json.loads(cache_file.read_text())['cases'] if cache_file.exists() else []
                     return self.send({**engine.assets,'token':token,'cases':cases})

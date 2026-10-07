@@ -30,4 +30,4 @@ package-dir = {"" = "src"}
 where = ["src"]
 
 [tool.setuptools.package-data]
-ear_malecns = ["brain_report_template.html", "workbench_template.html", "research_report_template.html"]
+ear_malecns = ["brain_report_template.html", "workbench_template.html", "research_report_template.html", "workbench_sync.js"]
